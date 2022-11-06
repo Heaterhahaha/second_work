@@ -114,8 +114,10 @@
             tj.style.display = 'block';
 
         }
+        const myHeaders = new Headers()
+        myHeaders.append("Content-Type", "application/json")
         tj.onclick = function () {
-            let host = 'https://db-api.amarea.cn/users'
+            let host = 'http://123.60.44.50:3000'
             let key = 'users'
             
             let requestOptions = {
@@ -123,11 +125,11 @@
                 headers: myHeaders,
                 redirect: "follow",
             }
-            let name = regName.value;
-            let pwd = regPwd.value;
-            let id = regId.value;
+            let uname1 =nameInput1.value;
+            let uname = nameInput.value;
+            let pwd = pwdInput.value;
             requestOptions.body = JSON.stringify({
-                id: nameInput1, name: nameInput, password: pwd,
+                id: uname1, name: uname, password: pwd,
             });
             fetch(`${host}/${key}`, requestOptions)
                 .then(response => response.json())
