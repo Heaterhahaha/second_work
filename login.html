@@ -65,6 +65,9 @@
         let hb1 = document.getElementById("helpBlock1");
         let hb2 = document.getElementById("helpBlock2");
         let hb3 = document.getElementById("helpBlock3");
+        const myHeaders = new Headers()
+        myHeaders.append("Content-Type", "application/json")
+        let host = 'http://123.60.44.50:3000'
         let xmlHttp = new XMLHttpRequest();
         let jsonObj = null;
         xmlHttp.onload = function () {
@@ -96,15 +99,32 @@
             } else if (!pwd) {
                 hb2.style.display = 'block';
             } else { //登录成功
-                for (let i = 0; i < jsonObj.length; i++) {
-                    if (uname == jsonObj[i]['id'] && pwd == jsonObj[i]['password'])
+                // for (let i = 0; i < jsonObj.length; i++) {
+                //     if (uname == jsonObj[i]['id'] && pwd == jsonObj[i]['password'])
 
-                        window.location.href = 'success.html?id=' + uname + '&password=' + pwd;
-                    else {
-
-                        hb3.style.display = 'block';
-                    }
+                //         window.location.href = 'success.html?id=' + uname + '&password=' + pwd;
+                //     else {
+                //         hb3.style.display = 'block';
+                //     }
+                // }
+                
+                let requestOptions = { // 里面不能有body
+                    method: "GET",
+                    headers: myHeaders,
+                    redirect: "follow",
                 }
+                fetch(`${host}/${"users"}/${uname}`, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.password == pwd) {   // 验证是否存在该用户return data
+                            alert(data.name)
+                            window.open("success.html")
+                        } else {
+                            throw new Error("用户名不存在")
+                        }
+                    })
+                    // .catch(err => console.log(err))
+
             }
 
 
@@ -114,18 +134,17 @@
             tj.style.display = 'block';
 
         }
-        const myHeaders = new Headers()
-        myHeaders.append("Content-Type", "application/json")
+        
         tj.onclick = function () {
-            let host = 'http://123.60.44.50:3000'
-            let key = 'users'
             
+            let key = 'users'
+
             let requestOptions = {
                 method: "POST",
                 headers: myHeaders,
                 redirect: "follow",
             }
-            let uname1 =nameInput1.value;
+            let uname1 = nameInput1.value;
             let uname = nameInput.value;
             let pwd = pwdInput.value;
             requestOptions.body = JSON.stringify({
@@ -134,8 +153,7 @@
             fetch(`${host}/${key}`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    alert('注册成功')
-                    console.log(data.name + '用户注册成功')
+                    alert(data.name + '用户注册成功')
                 })
                 .catch(err => {
                     alert('用户已存在，注册失败')
