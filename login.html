@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style type="text/css">
+        div.wrap {
+            width: 400px;
+            margin: 100px auto;
+            background-color: aqua;
+        }
+
+        span.help-block {
+            color: red !important;
+            display: none;
+        }
+
+        #cjmz {
+            display: none;
+        }
+
+        #tj {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <form>
+            <div id="cjmz">
+                <label for="manname">name</label>
+                <input type="text" class="form-control" id="manname" placeholder="please enter your password">
+                <span id="helpBlock4" class="help-block">名字不能为空</span>
+            </div>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" placeholder="please enter your name">
+                <span id="helpBlock1" class="help-block">用户名不能为空</span>
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password</label>
+                <input type="password" class="form-comanntrol" id="pwd" placeholder="please enter your password">
+                <span id="helpBlock2" class="help-block">密码不能为空</span>
+            </div>
+
+            <span id="helpBlock3" class="help-block">用户名或密码错误</span>
+
+            <button type="button" class="btn btn-default" id="login">登录</button>
+            <button type="button" id="zc">注册</button>
+            <button type="button" id="tj">提交</button>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        let cj = document.getElementById("cjmz");
+        let nameInput1 = document.getElementById("manname");
+        let nameInput = document.getElementById("username");
+        let pwdInput = document.getElementById("pwd");
+        let loginBtn = document.getElementById("login");
+        let zc = document.getElementById("zc");
+        let tj = document.getElementById("tj");
+        let hb1 = document.getElementById("helpBlock1");
+        let hb2 = document.getElementById("helpBlock2");
+        let hb3 = document.getElementById("helpBlock3");
+        let xmlHttp = new XMLHttpRequest();
+        let jsonObj = null;
+        xmlHttp.onload = function () {
+            if (xmlHttp.readyState == 4) { //表示响应完成
+                if (xmlHttp.status == 200) { //响应码为200  表示服务器正确响应
+                    //获取响应内容
+                    txt = xmlHttp.responseText;
+                    //把json字符串解析成json对象
+                    jsonObj = JSON.parse(txt);
+                    console.info(jsonObj)
+
+                } else {
+                    console.info('数据返回失败！状态代码：' + xmlHttp.status + '状态信息：' + xmlHttp.statusText);
+                }
+            }
+        }
+        xmlHttp.open('GET', 'https://db-api.amarea.cn/users', true);
+        xmlHttp.send();
+
+        loginBtn.onclick = function () {
+
+            //获取用户名和密码
+            let uname = nameInput.value;
+            let pwd = pwdInput.value;
+            //判断是否为空
+            if (!uname) {
+                console.log(jsonObj[0]['name'])
+                hb1.style.display = 'block';
+            } else if (!pwd) {
+                hb2.style.display = 'block';
+            } else { //登录成功
+                for (let i = 0; i < jsonObj.length; i++) {
+                    if (uname == jsonObj[i]['id'] && pwd == jsonObj[i]['password'])
+
+                        window.location.href = 'success.html?id=' + uname + '&password=' + pwd;
+                    else {
+
+                        hb3.style.display = 'block';
+                    }
+                }
+            }
+
+
+        }
+        zc.onclick = function () {
+            cj.style.display = 'block';
+            tj.style.display = 'block';
+
+        }
+        tj.onclick = function () {
+            let host = 'https://db-api.amarea.cn/users'
+            let key = 'users'
+            
+            let requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                redirect: "follow",
+            }
+            let name = regName.value;
+            let pwd = regPwd.value;
+            let id = regId.value;
+            requestOptions.body = JSON.stringify({
+                id: nameInput1, name: nameInput, password: pwd,
+            });
+            fetch(`${host}/${key}`, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    alert('注册成功')
+                    console.log(data.name + '用户注册成功')
+                })
+                .catch(err => {
+                    alert('用户已存在，注册失败')
+                    throw new Error("用户已存在，注册失败")
+                })
+
+        }
+
+    </script>
+</body>
+
+</html>
