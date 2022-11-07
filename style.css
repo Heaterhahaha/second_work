@@ -9,7 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url(photo/bg.jpg) no-repeat;
+    background: url(./photo/bg.JPG) no-repeat;
     background-size: cover;
 }
 
