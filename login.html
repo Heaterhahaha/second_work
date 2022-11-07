@@ -5,52 +5,35 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <style type="text/css">
-        div.wrap {
-            width: 400px;
-            margin: 100px auto;
-            background-color: aqua;
-        }
-
-        span.help-block {
-            color: red !important;
-            display: none;
-        }
-
-        #cjmz {
-            display: none;
-        }
-
-        #tj {
-            display: none;
-        }
-    </style>
 </head>
 
 <body>
     <div class="wrap">
         <form>
+            <h2>Login</h2>
             <div id="cjmz">
-                <label for="manname">name</label>
+                <label for="manname" class="lab">name</label>
                 <input type="text" class="form-control" id="manname" placeholder="please enter your password">
                 <span id="helpBlock4" class="help-block">名字不能为空</span>
             </div>
             <div class="form-group">
-                <label for="username">用户名</label>
+                <label for="username" class="lab">用户名</label>
                 <input type="text" class="form-control" id="username" placeholder="please enter your name">
                 <span id="helpBlock1" class="help-block">用户名不能为空</span>
             </div>
             <div class="form-group">
-                <label for="pwd">Password</label>
+                <label for="pwd" class="lab">Password</label>
                 <input type="password" class="form-comanntrol" id="pwd" placeholder="please enter your password">
                 <span id="helpBlock2" class="help-block">密码不能为空</span>
             </div>
 
             <span id="helpBlock3" class="help-block">用户名或密码错误</span>
-
-            <button type="button" class="btn btn-default" id="login">登录</button>
-            <button type="button" id="zc">注册</button>
-            <button type="button" id="tj">提交</button>
+            <div id="an">
+                <button type="button" class="btn btn-default" id="login">登录</button>
+                <button type="button" id="tj">提交</button>
+                <button type="button" id="zc">注册</button>
+                
+            </div>
         </form>
     </div>
 
@@ -107,7 +90,7 @@
                 //         hb3.style.display = 'block';
                 //     }
                 // }
-                
+
                 let requestOptions = { // 里面不能有body
                     method: "GET",
                     headers: myHeaders,
@@ -123,20 +106,21 @@
                             throw new Error("用户名不存在")
                         }
                     })
-                    // .catch(err => console.log(err))
+                // .catch(err => console.log(err))
 
             }
 
 
         }
         zc.onclick = function () {
-            cj.style.display = 'block';
+            cj.style.display = 'flex';
             tj.style.display = 'block';
+            loginBtn.style.display='none';
 
         }
-        
+
         tj.onclick = function () {
-            
+
             let key = 'users'
 
             let requestOptions = {
